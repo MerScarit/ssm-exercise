@@ -13,7 +13,7 @@
     ></el-aside>
     <el-main>
       <el-card class="box-card login-card">
-        <span class="login-title">元动力后台管理系统</span>
+        <span class="login-title">后台管理系统</span>
         <span class="login-tip">welcome 欢迎登陆</span>
         <el-form ref="user" :model="user" label-width="80px" :rules="rules">
           <el-form-item label="用户名" prop="userName">
@@ -80,7 +80,6 @@ export default {
           this.$store.dispatch("LOGIN", this.user).then((res) => {
             console.log(res);
             if (res.status === 200) {
-              console.log(status);
               this.$store.dispatch("GET_INFO").then(() => {
                 this.$router.push({ name: "main" });
               });

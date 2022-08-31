@@ -44,4 +44,4 @@ package com.scarit.utils;
         }
 
     }
-}
+

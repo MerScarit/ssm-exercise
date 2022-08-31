@@ -8,6 +8,7 @@ import com.scarit.annotation.Repeat;
 import com.scarit.constant.Constants;
 import com.scarit.entity.ExerciseUser;
 import com.scarit.entity.LoginUser;
+import com.scarit.exerciseEnum.DeleteFlagEnum;
 import com.scarit.service.ExerciseUserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -83,8 +86,12 @@ public class ExerciseUserController extends BaseController {
     @PostMapping
     @HasRole({"admin", "hr"})
     @Log(tittle="创建用户",businessType="用户操作")
-    @Repeat
-    public ResponseEntity<ExerciseUser> add(ExerciseUser exerciseUser) {
+    public ResponseEntity<ExerciseUser> add(@RequestBody ExerciseUser exerciseUser, HttpServletRequest request) {
+        exerciseUser.setLoginIp(request.getRemoteHost());
+        exerciseUser.setCreateTime(new Date());
+        exerciseUser.setCreateBy(getLoginUser().getExerciseUser().getUserName());
+        exerciseUser.setStatus("0");
+        exerciseUser.setDelFlag(DeleteFlagEnum.NO.getValue());
         return ResponseEntity.ok(this.exerciseUserService.insert(exerciseUser));
     }
     /**

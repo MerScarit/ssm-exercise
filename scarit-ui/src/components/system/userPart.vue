@@ -2,7 +2,7 @@
  * @Author: xinxin 949022601@qq.com
  * @Date: 2022-08-28 21:32:42
  * @LastEditors: xinxin 949022601@qq.com
- * @LastEditTime: 2022-08-29 09:53:08
+ * @LastEditTime: 2022-08-31 17:56:32
  * @FilePath: \scarit-ui\src\components\system\userPart.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -19,7 +19,12 @@
     </el-form-item>
   </el-form>
   <div class="flex">
-    <el-button type="primary" :icon="Edit" v-hasRole="['admin']" />
+    <el-button
+      type="primary"
+      :icon="Plus"
+      v-hasRole="['admin']"
+      @click="dialogVisible = true"
+    />
     <el-button type="primary" :icon="Share" />
     <el-button type="primary" :icon="Delete" />
     <el-button type="primary" :icon="Search">Search</el-button>
@@ -41,14 +46,37 @@
     :page-sizes="[2, 5, 10, 15]"
     :page-size="queryParam.size"
   />
+
+  <el-dialog v-model="dialogVisible" title="新增用户" width="30%">
+    <el-form ref="userFormRef" :model="userForm" label-width="120px">
+      <el-form-item label="用户名">
+        <el-input v-model="userForm.userName" />
+      </el-form-item>
+      <el-form-item label="昵称">
+        <el-input v-model="userForm.nickName" />
+      </el-form-item>
+      <el-form-item label="密码">
+        <el-input v-model="userForm.password" />
+      </el-form-item>
+      <el-form-item label="确认密码">
+        <el-input v-model="userForm.confirmPassword" />
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="submitForm"> 提交 </el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script setup>
 import { ref } from "vue";
 import { ElTable } from "element-plus";
-import { listUser } from "@/api/user";
+import { listUser, add } from "@/api/user";
 import { onMounted } from "vue";
-import { Delete, Edit, Search, Share, Upload } from "@element-plus/icons-vue";
+import { Delete, Plus, Search, Share, Upload } from "@element-plus/icons-vue";
 
 const queryParam = ref({
   size: 2,
@@ -57,6 +85,15 @@ const queryParam = ref({
   nickName: "",
 });
 
+let userForm = ref({
+  userId: null,
+  userName: "",
+  nickName: "",
+  password: "",
+  confirmPassword: "",
+});
+
+let dialogVisible = ref(false);
 const tableData = ref([]);
 const total = ref(0);
 
@@ -74,6 +111,14 @@ onMounted(() => {
 const changePage = async function (current) {
   queryParam.value.page = current - 1;
   getList();
+};
+const submitForm = function () {
+  delete userForm.value.confirmPassword;
+  //提交axios请求
+  add(userForm.value).then((res) => {
+    console.log(res);
+    dialogVisible.value = false;
+  });
 };
 
 const onSubmit = function () {
