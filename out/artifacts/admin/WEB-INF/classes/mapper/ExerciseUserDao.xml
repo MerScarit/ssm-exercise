@@ -72,6 +72,7 @@
           user_id, user_name, nick_name, email, phonenumber, sex, avatar, password, status, del_flag, login_ip, login_date, create_by, create_time, update_by, update_time
         from exercise_user
         <where>
+            and del_flag = "0"
             <if test="exerciseUser.userId != null">
                 and user_id = #{exerciseUser.userId}
             </if>
@@ -98,9 +99,6 @@
             </if>
             <if test="exerciseUser.status != null and exerciseUser.status != ''">
                 and status = #{exerciseUser.status}
-            </if>
-            <if test="exerciseUser.delFlag != null and exerciseUser.delFlag != ''">
-                and del_flag = #{exerciseUser.delFlag}
             </if>
             <if test="exerciseUser.loginIp != null and exerciseUser.loginIp != ''">
                 and login_ip = #{exerciseUser.loginIp}

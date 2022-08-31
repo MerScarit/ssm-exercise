@@ -100,7 +100,7 @@ public class ExerciseUserController extends BaseController {
      * @return 编辑结果
      */
     @PutMapping
-    public ResponseEntity<ExerciseUser> edit(ExerciseUser exerciseUser) {
+    public ResponseEntity<ExerciseUser> edit(@RequestBody ExerciseUser exerciseUser) {
         return ResponseEntity.ok(this.exerciseUserService.update(exerciseUser));
     }
     /**
@@ -108,8 +108,8 @@ public class ExerciseUserController extends BaseController {
      * @param id 主键
      * @return 删除是否成功
      */
-    @DeleteMapping
-    public ResponseEntity<Boolean> deleteById(Long id) {
+    @DeleteMapping("{id}")
+    public ResponseEntity<Boolean> deleteById(@PathVariable Long id) {
         return ResponseEntity.ok(this.exerciseUserService.deleteById(id));
     }
 
